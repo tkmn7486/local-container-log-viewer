@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  log-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: podman-log-manager-prod
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - NODE_ENV=production
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOG_LEVEL=info
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - log-manager-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: log-manager-nginx-prod
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - log-manager
+    networks:
+      - log-manager-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+networks:
+  log-manager-network:
+    driver: bridge
+
+volumes:
+  log-data:
+    driver: local
