@@ -75,7 +75,7 @@ function getMockLogs(containerId: string): LogEntry[] {
 // Docker APIからログを取得
 async function fetchContainerLogs(containerId: string): Promise<LogEntry[]> {
   try {
-    const isV0Environment = process.env.VERCEL || process.env.NODE_ENV === "development"
+    const isV0Environment = process.env.VERCEL
 
     if (isV0Environment) {
       console.log(`[v0] Using mock logs for container: ${containerId}`)

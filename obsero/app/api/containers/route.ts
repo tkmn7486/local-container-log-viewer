@@ -41,7 +41,7 @@ function getMockContainers() {
 
 export async function GET() {
   try {
-    const isV0Environment = process.env.VERCEL || process.env.NODE_ENV === "development"
+    const isV0Environment = process.env.VERCEL
 
     if (isV0Environment) {
       console.log("[v0] Using mock containers for v0 environment")
