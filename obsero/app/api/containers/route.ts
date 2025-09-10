@@ -54,8 +54,8 @@ export async function GET() {
     const isDockerAvailable = await dockerClient.isDockerAvailable()
 
     if (!isDockerAvailable) {
-      console.log("[v0] Docker not available, using mock data")
-      return NextResponse.json(getMockContainers())
+      console.log("[v0] Docker not available, returning empty container list")
+      return NextResponse.json([])
     }
 
     const containers = await dockerClient.listContainers(true)
@@ -73,13 +73,6 @@ export async function GET() {
     return NextResponse.json(formattedContainers)
   } catch (error) {
     console.error("[v0] Failed to fetch containers:", error)
-
-    try {
-      console.log("[v0] Falling back to mock containers due to error")
-      return NextResponse.json(getMockContainers())
-    } catch (fallbackError) {
-      console.error("[v0] Fallback also failed:", fallbackError)
-      return NextResponse.json({ error: "Failed to fetch containers", containers: [] }, { status: 500 })
-    }
+    return NextResponse.json([])
   }
 }

@@ -6,12 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "docker:build": "docker build -t podman-log-manager .",
-    "docker:run": "docker run -p 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock:ro podman-log-manager",
-    "docker:compose": "docker-compose up -d",
-    "docker:compose:dev": "docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml up",
-    "docker:stop": "docker-compose down"
+    "lint": "next lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

@@ -352,12 +352,18 @@ export default function ContainerLogManager() {
                           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
                         </Button>
                       </div>
-                      <CardDescription>{containers.length} 個のコンテナが見つかりました</CardDescription>
+                      <CardDescription>
+                        {containers.length > 0 
+                          ? `${containers.length} 個のコンテナが見つかりました`
+                          : "コンテナが見つかりませんでした"
+                        }
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <ScrollArea className="h-96">
                         <div className="space-y-2">
-                          {containers.map((container) => (
+                          {containers.length > 0 ? (
+                            containers.map((container) => (
                             <div
                               key={container.id}
                               className={`container-item p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
@@ -379,7 +385,14 @@ export default function ContainerLogManager() {
                               <p className="text-xs text-muted-foreground truncate">{container.image}</p>
                               <p className="text-xs text-muted-foreground">{container.status}</p>
                             </div>
-                          ))}
+                            ))
+                          ) : (
+                            <div className="text-center text-muted-foreground py-8">
+                              <Container className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                              <p>コンテナが見つかりませんでした</p>
+                              <p className="text-sm mt-2">Dockerが起動しているか確認してください</p>
+                            </div>
+                          )}
                         </div>
                       </ScrollArea>
                     </CardContent>

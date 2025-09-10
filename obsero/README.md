@@ -13,38 +13,18 @@
 
 ## 必要要件
 
-- Docker または Podman
-- Node.js 18+ (開発時)
+- Node.js 18+
+- Docker または Podman（ログ監視対象）
 
 ## インストール・起動
 
-### Docker Composeを使用（推奨）
+### 開発環境
 
 \`\`\`bash
 # リポジトリをクローン
 git clone <repository-url>
 cd local-podman-log-manager
 
-# 本番環境で起動
-docker-compose up -d
-
-# 開発環境で起動
-npm run docker:compose:dev
-\`\`\`
-
-### 手動でDockerを使用
-
-\`\`\`bash
-# イメージをビルド
-npm run docker:build
-
-# コンテナを起動
-npm run docker:run
-\`\`\`
-
-### 開発環境
-
-\`\`\`bash
 # 依存関係をインストール
 npm install
 
@@ -52,14 +32,29 @@ npm install
 npm run dev
 \`\`\`
 
+### 本番環境
+
+\`\`\`bash
+# 依存関係をインストール
+npm install
+
+# アプリケーションをビルド
+npm run build
+
+# 本番サーバーを起動
+npm start
+\`\`\`
+
 ## 設定
 
 ### Docker Socket
 
-アプリケーションはDocker APIにアクセスするため、Docker socketをマウントする必要があります：
+アプリケーションはDocker APIにアクセスするため、Docker socketにアクセスできる必要があります：
 
 - **Docker Desktop**: `/var/run/docker.sock`
 - **Podman**: `/run/user/1000/podman/podman.sock`
+
+Node.jsで直接起動する場合、ホスト環境からDocker socketにアクセスできるため、特別な設定は不要です。
 
 ### 環境変数
 
@@ -80,7 +75,7 @@ npm run dev
 - **フロントエンド**: Next.js 14 + React 19 + Tailwind CSS
 - **バックエンド**: Next.js API Routes
 - **ログ保存**: ローカルファイルシステム（JSON形式）
-- **コンテナ化**: Docker + Docker Compose
+- **実行環境**: Node.js（ローカル実行）
 
 ## API エンドポイント
 

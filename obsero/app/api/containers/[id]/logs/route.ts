@@ -88,8 +88,8 @@ async function fetchContainerLogs(containerId: string): Promise<LogEntry[]> {
     const isDockerAvailable = await dockerClient.isDockerAvailable()
 
     if (!isDockerAvailable) {
-      console.log(`[v0] Docker not available, using mock logs for: ${containerId}`)
-      return getMockLogs(containerId)
+      console.log(`[v0] Docker not available, returning empty logs for: ${containerId}`)
+      return []
     }
 
     // 実際のDocker APIからログを取得
@@ -107,7 +107,7 @@ async function fetchContainerLogs(containerId: string): Promise<LogEntry[]> {
     }))
   } catch (error) {
     console.error(`[v0] Failed to fetch logs for ${containerId}:`, error)
-    return getMockLogs(containerId)
+    return []
   }
 }
 
@@ -121,8 +121,6 @@ export async function GET(request: Request, { params }: { params: { id: string }
     return NextResponse.json(logs)
   } catch (error) {
     console.error("[v0] Failed to fetch container logs:", error)
-
-    const mockLogs = getMockLogs(params.id)
-    return NextResponse.json(mockLogs)
+    return NextResponse.json([])
   }
 }
